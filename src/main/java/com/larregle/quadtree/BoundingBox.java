@@ -2,53 +2,46 @@ package com.larregle.quadtree;
 
 public class BoundingBox {
 
-    private int topLeft;
-    private int topRight;
-    private int botLeft;
-    private int botRight;
+    private Point2D point;
+    private int width;
+    private int height;
 
-    public BoundingBox(int topLeft, int topRight, int botLeft, int botRight) {
-        this.topLeft = topLeft;
-        this.topRight = topRight;
-        this.botLeft = botLeft;
-        this.botRight = botRight;
+    public BoundingBox(int x, int y, int width, int height) {
+        this(new Point2D(x, y), width, height);
+    }
+
+    public BoundingBox(Point2D point, int width, int height) {
+        this.point = point;
+        this.width = width;
+        this.height = height;
     }
 
     public boolean containsPoint2D(Point2D point2D) {
-        return ((point2D.getX() > topLeft) && (point2D.getX() < topLeft + topRight) &&
-                (point2D.getY() > topLeft) && (point2D.getX() < topLeft + botLeft));
+        return ((point2D.getX() > point.getX()) && (point2D.getX() < point.getX() + width) &&
+                (point2D.getY() > point.getY()) && (point2D.getX() < point.getY() + height));
     }
 
-    public int getTopLeft() {
-        return topLeft;
+    public Point2D getPoint() {
+        return point;
     }
 
-    public void setTopLeft(int topLeft) {
-        this.topLeft = topLeft;
+    public void setPoint(Point2D point) {
+        this.point = point;
     }
 
-    public int getTopRight() {
-        return topRight;
+    public int getWidth() {
+        return width;
     }
 
-    public void setTopRight(int topRight) {
-        this.topRight = topRight;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
-    public int getBotLeft() {
-        return botLeft;
+    public int getHeight() {
+        return height;
     }
 
-    public void setBotLeft(int botLeft) {
-        this.botLeft = botLeft;
+    public void setHeight(int height) {
+        this.height = height;
     }
-
-    public int getBotRight() {
-        return botRight;
-    }
-
-    public void setBotRight(int botRight) {
-        this.botRight = botRight;
-    }
-
 }

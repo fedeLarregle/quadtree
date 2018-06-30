@@ -6,8 +6,7 @@ import java.util.List;
 public class QuadTree {
     public static final int QT_NODE_CAPACITY = 4;
 
-    private BoundingBox boundingBox;
-
+    private final BoundingBox boundingBox;
     private final List<Node> nodes;
 
     private QuadTree northWest;
@@ -15,8 +14,9 @@ public class QuadTree {
     private QuadTree southWest;
     private QuadTree southEast;
 
-    public QuadTree() {
+    public QuadTree(BoundingBox boundingBox) {
         this.nodes = new ArrayList<>(QT_NODE_CAPACITY);
+        this.boundingBox = boundingBox;
     }
 
     /**
@@ -44,16 +44,37 @@ public class QuadTree {
     }
 
     /**
-     *
+     * Retrieves the specific {@link QuadTree} that the given {@link Point2D} belongs to
      * @param point2D
-     * @return
+     * @return {@link QuadTree}
      */
-    public Node search(Point2D point2D) {
+    public QuadTree getQuadrant(Point2D point2D) {
+        if (!boundingBox.containsPoint2D(point2D))
+            return null;
+        if (northWest == null)
+            return null;
+
+        if (northWest.boundingBox.containsPoint2D(point2D)) { return northWest; }
+        if (northEast.boundingBox.containsPoint2D(point2D)) { return northEast; }
+        if (southWest.boundingBox.containsPoint2D(point2D)) { return southWest; }
+        if (southEast.boundingBox.containsPoint2D(point2D)) { return southEast; }
+
         return null;
     }
+
 
     /**
      * Create four children that fully divide this quad into four quads of equal area
      */
-    public void subdivide() {}
+    public void subdivide() {
+        int x = boundingBox.getPoint().getX();
+        int y = boundingBox.getPoint().getY();
+        int width = boundingBox.getWidth() / 2;
+        int height = boundingBox.getHeight() / 2;
+
+        northWest = new QuadTree(new BoundingBox(x, y, width, height));
+        northEast = new QuadTree(new BoundingBox(x + width, y, width, height));
+        southWest = new QuadTree(new BoundingBox(x, y + height, width, height));
+        southEast = new QuadTree(new BoundingBox(x + width, y + height, width, height));
+    }
 }
